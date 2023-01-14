@@ -1,0 +1,378 @@
+$black: #111;
+$white: #fff;
+$checkpoint: #e6e;
+
+
+@import "_normalize.scss";
+
+
+%animation-default {
+  z-index: 3;
+}
+
+
+html,
+body{
+  background-color: $black;
+  font-family: Heebo;
+  font-size: 1em;
+}
+
+
+.wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+.carousel{
+  width: 50%;
+  height: 50%;
+  overflow: hidden;
+  border: 2px solid $white;
+  position: relative;
+  &__items{
+    display: flex;
+    width: 500%;
+    height: 100%;
+    transition: all 0.5s ease-in-out; 
+  }
+  &__item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    & img{
+      height: 100%;
+      width: 100%;
+    }
+  }
+  &__nav{
+    position: absolute;
+    bottom: 5%;
+    left: calc(50% - 3.5em);
+    display: flex;
+  }
+  &__nav-ligaments{
+    height: 1em;
+    width: 1em;
+    border-radius: 50%;
+    border: 1px solid rgb(100%, 100%, 100%, 0.5);
+    background-color: transparent;
+    cursor: pointer;
+    margin-right: 0.5em;
+    transition: all 0.3s ease-in-out;
+    &:hover{
+      border-color: rgb(100%, 100%, 100%, 1);
+      transform: scale(1.1);
+    }
+  }
+  &__prev,
+  &__next{
+    > label {
+        border: 1px solid #fff;
+        border-radius: 50%;
+        cursor: pointer;
+        display: block;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        transition: all .3s ease;
+        -webkit-transition: all .3s ease;
+        // opacity: 0;
+        z-index: 2;
+      &:hover,
+      &:focus {
+        background: $checkpoint;
+      }
+      &:before,
+      &:after {
+        content: "";
+        position: absolute;
+        width: inherit;
+        height: inherit;
+      }
+      &:before {
+        background: linear-gradient(to top, #fff 0%, #fff 10%, rgba(51, 51, 51, 0) 10%),
+                    linear-gradient(to left, #fff 0%, #fff 10%, rgba(51, 51, 51, 0) 10%);
+        width: 60%;
+        height: 60%;
+        top: 20%;
+      }
+    }
+
+  }
+  &__prev{
+    > label{
+      left: 2%;
+      &:before{
+        left: 35%;
+        top: 20%;
+        transform: rotate(135deg);
+      }
+    }
+  }
+  &__next{
+    > label{
+      right: 2%;
+      &:before{
+        left: 10%;
+        transform: rotate(315deg);
+      }
+    }
+  }
+}
+
+
+.input-true{
+  position: absolute;
+  visibility: hidden;
+}
+
+
+@mixin carousel($items){
+
+
+  @for $i from 1 through $items{
+
+    #carousel-#{$i}:checked ~ {
+      & .snap{
+        margin-left: #{($i - 1)*-100%};
+      }
+      & .carousel__nav > .carousel__nav-ligaments:nth-child(#{$i}){
+        background-color: $checkpoint;
+      }
+      
+      & .carousel__next{
+        > .carousel__next-ligaments{
+          @if $i == $items{
+            &:nth-child(1){
+              @extend %animation-default;
+            }
+          }
+          @else{
+            &:nth-child(#{$i + 1}){
+              @extend %animation-default;
+            }
+          }
+        }
+      } 
+      & .carousel__prev{
+        > .carousel__prev-ligaments{
+          @if $i == 1 {
+            &:nth-child(#{$items}){
+              @extend %animation-default;
+            }
+          }
+          @else{
+            &:nth-child(#{$i - 1}){
+              @extend %animation-default;
+            }            
+          }
+        }
+      }
+    }
+
+  }
+
+
+}
+
+
+@include carousel(5);
+
+
+
+// #carousel-1:checked ~ {
+//   & .s1{
+//     margin-left: 0;
+//   }
+//   & .carousel__nav > .carousel__nav-ligaments:nth-child(1){
+//     background-color: $checkpoint;
+//   }
+//   & .carousel__next > .carousel__next-ligaments:nth-child(2){
+//      @extend %animation-default;
+//   }
+//   & .carousel__prev > .carousel__prev-ligaments:nth-child(5){
+//     @extend %animation-default;
+//   }
+// }
+
+
+// #carousel-2:checked ~ {
+//   & .s1{
+//     margin-left: -100%;
+//   }
+//   & .carousel__nav > .carousel__nav-ligaments:nth-child(2){
+//     background-color: $checkpoint;
+//   }
+//   & .carousel__next > .carousel__next-ligaments:nth-child(3){
+//     @extend %animation-default;
+//   }
+//   & .carousel__prev > .carousel__prev-ligaments:nth-child(1){
+//     @extend %animation-default;
+//   }
+// }
+
+
+// #carousel-3:checked ~ {
+//   & .s1{
+//     margin-left: -200%;
+//   }
+//   & .carousel__nav > .carousel__nav-ligaments:nth-child(3){
+//     background-color: $checkpoint;
+//   }
+//   & .carousel__next > .carousel__next-ligaments:nth-child(4){
+//     @extend %animation-default;
+//   }
+//   & .carousel__prev > .carousel__prev-ligaments:nth-child(2){
+//     @extend %animation-default;
+//   }
+// }
+
+
+// #carousel-4:checked ~ {
+//   & .s1{
+//     margin-left: -300%;
+//   }
+//   & .carousel__nav > .carousel__nav-ligaments:nth-child(4){
+//     background-color: $checkpoint;
+//   }
+//   & .carousel__next > .carousel__next-ligaments:nth-child(5){
+//     @extend %animation-default;
+//   }
+//   & .carousel__prev > .carousel__prev-ligaments:nth-child(3){
+//     @extend %animation-default;
+//   }
+// }
+
+
+// #carousel-5:checked ~ {
+//   & .s1{
+//     margin-left: -400%;
+//   }
+//   & .carousel__nav > .carousel__nav-ligaments:nth-child(5){
+//     background-color: $checkpoint;
+//   }
+//   & .carousel__next > .carousel__next-ligaments:nth-child(1){
+//     @extend %animation-default;
+//   }
+//   & .carousel__prev > .carousel__prev-ligaments:nth-child(4){
+//     @extend %animation-default;
+//   }
+// }
+
+
+// @mixin animation-snap($one, $two, $three, $four, $nb-amimation: 'default'){
+
+//     @keyframes snap-#{$nb-amimation} {
+//       0% {
+//         transform: translateX(#{$one});
+//       }
+//       50% {
+//         transform: translateX(#{$two});
+//       }
+//       75% {
+//         transform: translateX(#{$three});
+//       }
+//       100% {
+//         transform: translateX(#{$four});
+//       }
+//   }
+
+// }
+
+
+// Анимации вперед
+// @include animation-snap(100%, 75%, 50%, 0%, 1);
+// @include animation-snap(0%, -50%, -75%, -100%, 2);
+// @include animation-snap(-100%, -150%, -175%, -200%, 3);
+// @include animation-snap(-200%, -250%, -275%, -300%, 4);
+// @include animation-snap(-300%, -350%, -375%, -400%, 5);
+
+
+// @for $i from 1 through 5 {
+  
+//   @if $i == 1 {
+//     #carousel-#{$i}:checked ~ {
+//       & .carousel__items .carousel__item:nth-child(#{$i}){
+//         transform: translateX(#{($i - 1)*-100%});
+//         animation: snap-#{$i} 0.3s ease-in-out;
+//       }
+//       & .carousel__nav > .carousel__nav-ligaments:nth-child(#{$i}){
+//         background-color: $checkpoint;
+//       }
+//     }
+//   }
+//   @else {
+//     #carousel-#{$i}:checked ~ {
+//       & .carousel__items .carousel__item:nth-child(#{$i}){
+//         transform: translateX(#{($i - 1)*-100%});
+//         animation: snap-#{$i} 0.3s ease-in-out;
+//       }
+//       & .carousel__items .carousel__item:nth-child(1){
+//         opacity: 0;
+//       }
+//       & .carousel__nav > .carousel__nav-ligaments:nth-child(#{$i}){
+//         background-color: $checkpoint;
+//       }
+//     }
+//   }
+
+// }
+
+// #carousel-1:checked ~ {
+//   & .carousel__items .carousel__item:nth-child(1){
+//     transform: translateX(0);
+//     animation: snap-1 0.3s ease-in-out;
+//   }
+// }
+
+
+// #carousel-2:checked ~ {
+//   & .carousel__items .carousel__item:nth-child(2){
+//     transform: translateX(-100%);
+//     animation: snap-2 0.3s ease-in-out;
+//   }
+//   & .carousel__items .carousel__item:nth-child(1){
+//     opacity: 0;
+//   }
+// }
+
+
+// #carousel-3:checked ~ {
+//   & .carousel__items .carousel__item:nth-child(3){
+//     transform: translateX(-200%);
+//     animation: snap-3 0.3s ease-in-out;
+//   }
+//   & .carousel__items .carousel__item:nth-child(1){
+//     opacity: 0;
+//   }
+// }
+
+
+// #carousel-4:checked ~ {
+//   & .carousel__items .carousel__item:nth-child(4){
+//     transform: translateX(-300%);
+//     animation: snap-4 0.3s ease-in-out;
+//   }
+//   & .carousel__items .carousel__item:nth-child(1){
+//     opacity: 0;
+//   }
+// }
+
+
+// #carousel-5:checked ~ {
+//   & .carousel__items .carousel__item:nth-child(5){
+//     transform: translateX(-400%);
+//     animation: snap-5 0.3s ease-in-out;
+//   }
+//   & .carousel__items .carousel__item:nth-child(1){
+//     opacity: 0;
+//   }
+// }
